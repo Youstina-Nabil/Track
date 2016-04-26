@@ -1,0 +1,37 @@
+
+<html>
+ <head>
+  <title>test</title>
+ </head>
+ <h1> test on table query</h1>
+ <body>
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "SP";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password,$dbname);
+//$conn = mysql_connect($servername, $username, $password);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+} 
+echo "Connected successfully"."<br>";
+
+$sql = "SELECT  * FROM FleetOwner ";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+        echo "First Name : " . $row['FirstName']. " Last Name : " . $row['LastName']. " Company Name : " . $row['CompanyName']. "<br>";
+    }
+} else {
+    echo "0 results";
+    }
+    $conn->close();
+   ?>
+    </body>
+</html>
