@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<title> Buses </title>
+<head>
+</head>
+<link rel="stylesheet" href="style.css">
+<body>
+<div style="overflow-y:auto;">
+<table>
+<tr><th>License Plate </th>
+      <th>Bus No </th>
+      <th>Bus Line </th>
+      <th>Bus Yard Name  </th>
+      <th>Status  </th>
+      <th>View Report  </th>
+      </tr>
+</div>
+<?php
+require ('config.php');
+
+$sqlStatus1 = ("UPDATE bus SET BusStatus = 'Working' " );
+$resultS1 = mysql_query($sqlStatus1);
+
+$timeNow = date("Y-m-d");
+//echo $timeNow ."<br>";
+
+$sqlT = ("SELECT TireLastChangeDate, LastMaintenceDate FROM Bus ");
+$resultT = mysql_query($sqlT);
+$counter=1;
+while($row = mysql_fetch_array($resultT, MYSQL_ASSOC)) 
+{ 
+$datetime1 = new DateTime($row['TireLastChangeDate']);
+$datetime2 = new DateTime($timeNow );
+$datetime3 = new DateTime($row['LastMaintenceDate']);
+$interval = $datetime1->diff($datetime2);
+$interval2 = $datetime3->diff($datetime2);
+
+if ($interval->format('%R%a days') >=  90 || $interval2->format('%R%a days') >=  90)
+{
+$ok= '0';
+//echo "ok : ".$ok ."<br>";
+}
+else
+{
+$ok = 'Working';
+//echo "ok : ".$ok ."<br>";
+}
+
+$sqlStatus1 = ("UPDATE bus SET BusStatus = $ok WHERE id=$counter" );
+$resultS1 = mysql_query($sqlStatus1);
+
+$sqlStatus = ("UPDATE bus SET BusStatus =	'Not Working Correctly' WHERE  ( (Speed > SpeedLimit)  || (FuelLevel < 4) || (BusStatus = '0') ) " );
+$resultS = mysql_query($sqlStatus);
+
+$counter=$counter+1;
+}
+
+$sql = ("SELECT LicensePlate,BusNo,BusLine, BusYardName ,BusStatus FROM Bus ");
+$result = mysql_query($sql);
+
+$counter=1;
+while($row = mysql_fetch_array($result, MYSQL_ASSOC)) 
+{ 
+$sqllink= ("SELECT * From Bus WHERE id=$counter");
+$resultlink = mysql_query($sqllink);
+print "<tr>"; 
+print "<td>" . $LP=$row['LicensePlate'] . "</td>"; 
+print "<td>" . $row['BusNo'] . "</td>"; 
+print "<td>" . $row['BusLine'] . "</td>"; 
+print "<td>" . $row['BusYardName'] . "</td>";
+print "<td>" . $row['BusStatus'] . "</td>"; 
+print "<td> <a href =reports.php?id=$counter&LicensePlate=$LP   View Report </a>"." </td>"; //to make it open in new window (target=_blank)
+print "</tr>"; 
+$counter=$counter+1;
+} 
+print "</table>"; 
+
+?>
+
+</body>
+</html>
