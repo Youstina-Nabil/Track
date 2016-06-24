@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<title> Reports </title>
+<head>
+</head>
+<link rel="stylesheet" href="style.css">
+<body>
+<div style="overflow-y:auto;">
+<table>
+ <col width="220">
+</div>
+<?php
+require ('config.php');
+$counter = $_GET["id"];
+$LP = $_GET["LicensePlate"];
+//echo $counter;
+
+  
+echo $LP ;
+
+$sqllink= ("SELECT * From Bus WHERE id=$counter");
+$resultlink = mysql_query($sqllink);
+
+while($row = mysql_fetch_array($resultlink, MYSQL_ASSOC)) 
+{ 
+print "<tr><th>License Plate </th><td>" . $row['LicensePlate'] . "</td></tr>"; 
+print "<tr><th>Bus No </th><td>" . $row['BusNo'] . "</td></tr>"; 
+print "<tr><th>Bus Line </th><td>" . $row['BusLine'] . "</td></tr>"; 
+print "<tr><th>Geofence Name </th><td>" . $row['GeofenceName'] . "</td></tr>";
+print "<tr><th>Speed </th><td>" . $row['Speed'] . "</td></tr>";
+print "<tr><th>Speed Limit </th><td>" . $row['SpeedLimit'] . "</td></tr>";
+print "<tr><th>Tire Last Change Date </th><td>" . $row['TireLastChangeDate'] . "</td></tr>";
+print "<tr><th>Last Maintence Date </th><td>" . $row['LastMaintenceDate'] . "</td></tr>";
+print "<tr><th>Bus Status </th><td>" . $row['BusStatus'] . "</td></tr>";
+print "<tr><th>Fuel Level </th><td>" . $row['FuelLevel'] . "</td></tr>";
+print "<tr><th>Device Serial </th><td>" . $row['DeviceSerial'] . "</td></tr>";
+print "<tr><th>Sim Phone No </th><td>" . $row['SimPhoneNo'] . "</td></tr>";
+print "<tr><th>Latitude </th><td>" . $row['Latitude'] . "</td></tr>";
+print "<tr><th>Longtitude </th><td>" . $row['Longtitude'] . "</td></tr>";
+print "<tr><th>Current Location Time </th><td>" . $row['CurrentLocationTime'] . "</td></tr>";
+print "<tr><th>Device Installation Time </th><td>" . $row['DeviceInstallationTime'] . "</td></tr>";
+print "<tr><th>Device Reset Time </th><td>" . $row['DeviceResetTime'] . "</td></tr>";
+print "<tr><th>Bus Yard Name  </th><td>" . $row['BusYardName'] . "</td></tr>";
+} 
+
+
+ $sql="SELECT * 
+  From drives , driver
+  WHERE drives.DriverID = driver.DriverID AND drives.LicensePlate= '$LP' ";//only statiic?!!
+  $result = mysql_query($sql);
+  while($row = mysql_fetch_array($result, MYSQL_ASSOC)) 
+{ 
+print "<tr><th>Driver ID</th><td>" . $row['DriverID'] . "</td></tr>"; 
+print "<tr><th>First Name </th><td>" . $row['FName'] . "</td></tr>"; 
+print "<tr><th>Last Name </th><td>" . $row['LName'] . "</td></tr>";
+print "<tr><th>Notes </th><td>" . $row['Notes'] . "</td></tr>";
+print "<tr><th>Driving License No </th><td>" . $row['DrivingLicenseNo'] . "</td></tr>";
+print "<tr><th>Driving License Expiry Date</th><td>" . $row['DrivingLicenseExpiryDate'] . "</td></tr>";
+print "<tr><th>Phone No</th><td>" . $row['PhoneNo'] . "</td></tr>";
+print "<tr><th>Shift</th><td>" . $row['Shift'] . "</td></tr>";
+}
+
+print "</table>"; 
+
+
+?>
+
+</body>
+</html>
